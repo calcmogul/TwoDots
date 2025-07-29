@@ -14,7 +14,7 @@ project(TwoDots)
 
 include(FetchContent)
 
-fetchcontent_declare(
+FetchContent_Declare(
     SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
     GIT_TAG 3.0.1
@@ -22,7 +22,7 @@ fetchcontent_declare(
     EXCLUDE_FROM_ALL
     SYSTEM
 )
-fetchcontent_makeavailable(SFML)
+FetchContent_MakeAvailable(SFML)
 
 file(GLOB_RECURSE cpp_src src/*.cpp)
 set_property(SOURCE ${cpp_src} PROPERTY COMPILE_FLAGS "-Wno-unused")
