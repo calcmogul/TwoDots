@@ -5,14 +5,14 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
 endif()
 
-# Generate compile_commands.json by default
-if(NOT CMAKE_EXPORT_COMPILE_COMMANDS)
-    set(CMAKE_EXPORT_COMPILE_COMMANDS "YES" CACHE STRING "" FORCE)
-endif()
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(TwoDots)
 
 include(FetchContent)
+
+file(GLOB_RECURSE cpp_src src/*.cpp)
+add_executable(TwoDots ${cpp_src})
 
 FetchContent_Declare(
     SFML
@@ -23,13 +23,12 @@ FetchContent_Declare(
     SYSTEM
 )
 FetchContent_MakeAvailable(SFML)
-
-file(GLOB_RECURSE cpp_src src/*.cpp)
-set_property(SOURCE ${cpp_src} PROPERTY COMPILE_FLAGS "-Wno-unused")
-add_executable(TwoDots ${cpp_src})
-
 target_link_libraries(TwoDots PUBLIC SFML::Graphics)
 
-target_compile_options(TwoDots PRIVATE -Wall -Wextra -Werror -pedantic)
+if(NOT MSVC)
+    target_compile_options(TwoDots PRIVATE -Wall -Wextra -pedantic)
+endif()
+set_property(TARGET TwoDots PROPERTY COMPILE_WARNING_AS_ERROR ON)
+
 target_compile_features(TwoDots PUBLIC cxx_std_23)
 target_include_directories(TwoDots PRIVATE src)
